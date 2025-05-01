@@ -1,0 +1,1 @@
+aws efs delete-replication-configuration --file-system-id
