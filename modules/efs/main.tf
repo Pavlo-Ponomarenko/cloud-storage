@@ -1,5 +1,17 @@
+resource "aws_kms_key" "efs_key" {
+  description             = "KMS key for EFS encryption"
+  deletion_window_in_days = 7
+  enable_key_rotation     = true
+}
+
+resource "aws_kms_alias" "efs_key_alias" {
+  name          = "alias/efs-key"
+  target_key_id = aws_kms_key.efs_key.id
+}
+
 resource "aws_efs_file_system" "primary" {
   creation_token = "primary-efs"
+  kms_key_id     = aws_kms_key.efs_key.arn
   encrypted = true
   tags = {
     Name = "PrimaryEFS"
